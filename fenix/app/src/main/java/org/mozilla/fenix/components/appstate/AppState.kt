@@ -4,6 +4,7 @@
 
 package org.mozilla.fenix.components.appstate
 
+import mozilla.components.concept.awesomebar.AwesomeBar
 import mozilla.components.concept.storage.BookmarkNode
 import mozilla.components.feature.tab.collections.TabCollection
 import mozilla.components.feature.top.sites.TopSite
@@ -55,6 +56,7 @@ import org.mozilla.fenix.wallpapers.WallpaperState
  * @property wallpaperState The [WallpaperState] to display in the [HomeFragment].
  * @property standardSnackbarError A snackbar error message to display.
  * @property shoppingState Holds state for shopping feature that's required to live the lifetime of a session.
+ * @property awesomeBarState Holds state for interactions with the [AwesomeBar].
  */
 data class AppState(
     val isForeground: Boolean = true,
@@ -79,4 +81,10 @@ data class AppState(
     val wallpaperState: WallpaperState = WallpaperState.default,
     val standardSnackbarError: StandardSnackbarError? = null,
     val shoppingState: ShoppingState = ShoppingState(),
-) : State
+    val awesomeBarState: AwesomeBarState = AwesomeBarState(),
+) : State {
+    data class AwesomeBarState(
+        val visibilityState: AwesomeBar.VisibilityState = AwesomeBar.VisibilityState(),
+        val clickedSuggestion: AwesomeBar.Suggestion? = null,
+    )
+}

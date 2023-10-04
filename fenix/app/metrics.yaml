@@ -10822,11 +10822,49 @@ fx_suggest:
   ping_type:
     type: string
     description: >
-      The ping's type. Currently always "fxsuggest-click".
+      The ping's type. Either "fxsuggest-click" or "fxsuggest-impression".
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1857092
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-android/pull/3958#issuecomment-1758607927
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  position:
+    type: quantity
+    unit: non-negative integer
+    description: >
+      The position (1-based) of this suggestion in the full list of suggestions, relative to the
+      top of the awesomebar.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1858542
+    data_reviews:
+      - TODO
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  suggested_index:
+    type: quantity
+    unit: non-negative integer
+    description: >
+      The position (1-based) of this suggestion in the "Firefox Suggest" group, relative to the top
+      of the group.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1858542
+    data_reviews:
+      - TODO
     data_sensitivity:
       - interaction
     notification_emails:
@@ -10862,6 +10900,24 @@ fx_suggest:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1857092
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-android/pull/3958#issuecomment-1758607927
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  is_clicked:
+    type: boolean
+    description: >
+      If `ping_type` is `fxsuggest-impression`, indicates whether this impression is for a clicked
+      suggestion. Always `true` for `fxsuggest-click` pings.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1858542
+    data_reviews:
+      - TODO
     data_sensitivity:
       - interaction
     notification_emails:

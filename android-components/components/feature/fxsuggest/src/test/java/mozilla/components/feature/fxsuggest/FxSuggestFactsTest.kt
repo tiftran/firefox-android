@@ -19,7 +19,7 @@ class FxSuggestFactsTest {
         CollectionProcessor.withFactCollection { facts ->
 
             emitSponsoredSuggestionClickedFact(
-                FxSuggestClickInfo.Amp(
+                FxSuggestInteractionInfo.Amp(
                     blockId = 123,
                     advertiser = "mozilla",
                     clickUrl = "https://example.com/reporting",
@@ -34,7 +34,7 @@ class FxSuggestFactsTest {
                 assertEquals(Action.INTERACTION, action)
                 assertEquals(FxSuggestFacts.Items.AMP_SUGGESTION_CLICKED, item)
 
-                val clickInfo = requireNotNull(metadata?.get(FxSuggestFacts.MetadataKeys.CLICK_INFO) as? FxSuggestClickInfo.Amp)
+                val clickInfo = requireNotNull(metadata?.get(FxSuggestFacts.MetadataKeys.CLICK_INFO) as? FxSuggestInteractionInfo.Amp)
                 assertEquals(clickInfo.blockId, 123)
                 assertEquals(clickInfo.advertiser, "mozilla")
                 assertEquals(clickInfo.clickUrl, "https://example.com/reporting")

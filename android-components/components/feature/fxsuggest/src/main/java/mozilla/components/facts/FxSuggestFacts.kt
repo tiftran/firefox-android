@@ -4,7 +4,7 @@
 
 package mozilla.components.feature.fxsuggest.facts
 
-import mozilla.components.feature.fxsuggest.FxSuggestClickInfo
+import mozilla.components.feature.fxsuggest.FxSuggestInteractionInfo
 import mozilla.components.support.base.Component
 import mozilla.components.support.base.facts.Action
 import mozilla.components.support.base.facts.Fact
@@ -44,7 +44,7 @@ private fun emitFxSuggestFact(
     ).collect()
 }
 
-internal fun emitSponsoredSuggestionClickedFact(clickInfo: FxSuggestClickInfo) {
+internal fun emitSponsoredSuggestionClickedFact(clickInfo: FxSuggestInteractionInfo) {
     emitFxSuggestFact(
         Action.INTERACTION,
         FxSuggestFacts.Items.AMP_SUGGESTION_CLICKED,

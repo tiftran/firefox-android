@@ -5,6 +5,7 @@
 package org.mozilla.fenix.components.appstate
 
 import androidx.annotation.VisibleForTesting
+import mozilla.components.concept.awesomebar.AwesomeBar
 import mozilla.components.service.pocket.PocketStory.PocketRecommendedStory
 import mozilla.components.service.pocket.PocketStory.PocketSponsoredStory
 import mozilla.components.service.pocket.ext.recordNewImpression
@@ -234,6 +235,18 @@ internal object AppStoreReducer {
         )
 
         is AppAction.ShoppingAction -> ShoppingStateReducer.reduce(state, action)
+
+        is AppAction.AwesomeBarAction.VisibilityStateUpdated -> {
+            val awesomeBarState = state.awesomeBarState.copy(visibilityState = action.visibilityState)
+            state.copy(awesomeBarState = awesomeBarState)
+        }
+        is AppAction.AwesomeBarAction.SuggestionClicked -> {
+            val awesomeBarState = state.awesomeBarState.copy(clickedSuggestion = action.suggestion)
+            state.copy(awesomeBarState = awesomeBarState)
+        }
+        is AppAction.AwesomeBarAction.EngagementFinished -> {
+            state.copy(awesomeBarState = AppState.AwesomeBarState())
+        }
     }
 }
 

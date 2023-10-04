@@ -9,7 +9,7 @@ import mozilla.appservices.suggest.Suggestion
 import mozilla.appservices.suggest.SuggestionProvider
 import mozilla.appservices.suggest.SuggestionQuery
 import mozilla.components.concept.awesomebar.AwesomeBar
-import mozilla.components.feature.fxsuggest.facts.emitSponsoredSuggestionClickedFact
+import mozilla.components.feature.fxsuggest.facts.FxSuggestFacts
 import mozilla.components.feature.session.SessionUseCases
 import mozilla.components.support.ktx.kotlin.toBitmap
 import java.util.UUID
@@ -69,8 +69,8 @@ class FxSuggestSuggestionProvider(
                     fullKeyword = suggestion.fullKeyword,
                     isSponsored = true,
                     icon = suggestion.icon,
-                    clickInfo = contextId?.let {
-                        FxSuggestClickInfo.Amp(
+                    interactionInfo = contextId?.let {
+                        FxSuggestInteractionInfo.Amp(
                             blockId = suggestion.blockId,
                             advertiser = suggestion.advertiser.lowercase(),
                             clickUrl = suggestion.clickUrl,
@@ -101,9 +101,9 @@ class FxSuggestSuggestionProvider(
                 },
                 onSuggestionClicked = {
                     loadUrlUseCase.invoke(details.url)
-                    details.clickInfo?.let {
-                        emitSponsoredSuggestionClickedFact(it)
-                    }
+                },
+                metadata = buildMap {
+                    details.interactionInfo?.let { put(FxSuggestFacts.MetadataKeys.CLICK_INFO, it) }
                 },
             )
         }
@@ -115,13 +115,13 @@ internal data class SuggestionDetails(
     val fullKeyword: String,
     val isSponsored: Boolean,
     val icon: List<UByte>?,
-    val clickInfo: FxSuggestClickInfo? = null,
+    val interactionInfo: FxSuggestInteractionInfo? = null,
 )
 
 /**
  * Collective of fields required for fxsuggest click telemetry
  */
-sealed interface FxSuggestClickInfo {
+sealed interface FxSuggestInteractionInfo {
     /**
      * AMP related fields for fx suggest click telemetry
      *
@@ -137,5 +137,5 @@ sealed interface FxSuggestClickInfo {
         val clickUrl: String,
         val iabCategory: String,
         val contextId: String,
-    ) : FxSuggestClickInfo
+    ) : FxSuggestInteractionInfo
 }
