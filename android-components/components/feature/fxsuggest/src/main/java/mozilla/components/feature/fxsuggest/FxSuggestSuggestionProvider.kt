@@ -9,6 +9,7 @@ import mozilla.appservices.suggest.Suggestion
 import mozilla.appservices.suggest.SuggestionProvider
 import mozilla.appservices.suggest.SuggestionQuery
 import mozilla.components.concept.awesomebar.AwesomeBar
+import mozilla.components.feature.fxsuggest.facts.emitSponsoredSuggestionClickedFact
 import mozilla.components.feature.session.SessionUseCases
 import mozilla.components.support.ktx.kotlin.toBitmap
 import java.util.UUID
@@ -21,6 +22,7 @@ import java.util.UUID
  * @param includeSponsoredSuggestions Whether to return suggestions for sponsored content.
  * @param includeNonSponsoredSuggestions Whether to return suggestions for web content.
  * @param suggestionsHeader An optional header title for grouping the returned suggestions.
+ * @param contextId A uuid identifier that should persist the entirety of the browser profile lifecycle.
  */
 class FxSuggestSuggestionProvider(
     private val resources: Resources,
@@ -28,6 +30,7 @@ class FxSuggestSuggestionProvider(
     private val includeSponsoredSuggestions: Boolean,
     private val includeNonSponsoredSuggestions: Boolean,
     private val suggestionsHeader: String? = null,
+    private val contextId: String,
 ) : AwesomeBar.SuggestionProvider {
     override val id: String = UUID.randomUUID().toString()
 
@@ -66,6 +69,13 @@ class FxSuggestSuggestionProvider(
                     fullKeyword = suggestion.fullKeyword,
                     isSponsored = true,
                     icon = suggestion.icon,
+                    clickInfo = FxSuggestClickInfo.Amp(
+                        blockId = suggestion.blockId.toString(),
+                        advertiser = suggestion.advertiser,
+                        reportingUrl = suggestion.clickUrl,
+                        iabCategory = suggestion.iabCategory,
+                        contextId = contextId,
+                    ),
                 )
                 is Suggestion.Wikipedia -> SuggestionDetails(
                     title = suggestion.title,
@@ -89,6 +99,9 @@ class FxSuggestSuggestionProvider(
                 },
                 onSuggestionClicked = {
                     loadUrlUseCase.invoke(details.url)
+                    details.clickInfo?.let {
+                        emitSponsoredSuggestionClickedFact(it)
+                    }
                 },
             )
         }
@@ -100,4 +113,21 @@ internal data class SuggestionDetails(
     val fullKeyword: String,
     val isSponsored: Boolean,
     val icon: List<UByte>?,
+    val clickInfo: FxSuggestClickInfo? = null,
 )
+
+/**
+ * Collective of fields required for fxsuggest click telemetry
+ */
+sealed interface FxSuggestClickInfo {
+    /**
+     * AMP related fields for fx suggest click telemetry
+     */
+    data class Amp(
+        val blockId: String,
+        val advertiser: String,
+        val reportingUrl: String,
+        val iabCategory: String,
+        val contextId: String,
+    ) : FxSuggestClickInfo
+}

@@ -59,6 +59,7 @@ class FxSuggestSuggestionProviderTest {
             loadUrlUseCase = mock(),
             includeNonSponsoredSuggestions = true,
             includeSponsoredSuggestions = true,
+            contextId = "c303282d-f2e6-46ca-a04a-35d3d873712d",
         )
 
         val suggestions = provider.onInputChanged("")
@@ -105,6 +106,7 @@ class FxSuggestSuggestionProviderTest {
             loadUrlUseCase = mock(),
             includeNonSponsoredSuggestions = true,
             includeSponsoredSuggestions = true,
+            contextId = "c303282d-f2e6-46ca-a04a-35d3d873712d",
         )
 
         val suggestions = provider.onInputChanged("la")
@@ -135,6 +137,7 @@ class FxSuggestSuggestionProviderTest {
             loadUrlUseCase = mock(),
             includeNonSponsoredSuggestions = true,
             includeSponsoredSuggestions = true,
+            contextId = "c303282d-f2e6-46ca-a04a-35d3d873712d",
         )
 
         provider.onInputCancelled()
@@ -160,6 +163,7 @@ class FxSuggestSuggestionProviderTest {
             loadUrlUseCase = mock(),
             includeNonSponsoredSuggestions = true,
             includeSponsoredSuggestions = false,
+            contextId = "c303282d-f2e6-46ca-a04a-35d3d873712d",
         )
 
         val suggestions = provider.onInputChanged("la")
@@ -203,6 +207,7 @@ class FxSuggestSuggestionProviderTest {
             loadUrlUseCase = mock(),
             includeNonSponsoredSuggestions = false,
             includeSponsoredSuggestions = true,
+            contextId = "c303282d-f2e6-46ca-a04a-35d3d873712d",
         )
 
         val suggestions = provider.onInputChanged("la")
